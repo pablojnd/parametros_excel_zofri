@@ -1,45 +1,37 @@
-# Archivos y carpetas generados por el programa
-/database/
-/app/
-/output_csv/
-sheet_summary.txt
-
-# Archivos de entrada Excel
-*.xls
-
-# Archivos binarios compilados
+# Archivos generados por Go
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
+*.test
+*.out
+*.prof
 
-# Archivos temporales
-*.tmp
-*.bak
-*.swp
-*~.nib
-local.properties
-.settings/
-.loadpath
-.recommenders
-
-# Carpetas específicas de Go
-/bin/
-/pkg/
+# Directorio de dependencias
 /vendor/
 
-# Archivos de IDE y editores
+# Archivos de salida generados
+/app/
+/database/
+/output_csv/
+*.csv
+sheet_summary.txt
+
+# Archivos de datos de entrada
+*.xlsx
+*.xls
+*.xlsm
+
+# Archivos de configuración
 .idea/
 .vscode/
-*.sublime-workspace
-*.sublime-project
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Archivos de log
-*.log
-
-# Archivos de sistema operativo
+# Sistema operativo
 .DS_Store
 Thumbs.db
-ehthumbs.db
-desktop.ini

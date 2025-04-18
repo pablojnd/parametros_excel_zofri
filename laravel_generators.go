@@ -39,7 +39,7 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 		tableName := "zofri_" + normalize(sheet)
 
 		// Generar Seeder PHP
-		seederClassName := className + "Seeder"
+		seederClassName := "Zofri" + className + "Seeder" // Añadir "Zofri" al nombre del seeder
 		if err := generateSeeder(seedDir, seederClassName, modelName, headers, dataRows); err != nil {
 			fmt.Printf("⚠ Error al generar seeder para %q: %v\n", sheet, err)
 		}
@@ -127,7 +127,7 @@ func generateMigration(migrationDir string, className string, tableName string, 
 	}
 	defer migFile.Close()
 
-	classMig := fmt.Sprintf("Create%sTable", className)
+	classMig := fmt.Sprintf("CreateZofri%sTable", className) // Asegurar que siempre incluye "Zofri"
 
 	fmt.Fprintf(migFile, `<?php
 
@@ -158,7 +158,7 @@ class %s extends Migration
 				switch strings.ToUpper(campo["tipodato"]) {
 				case "VARCHAR2(10)", "VARCHAR2(40)", "VARCHAR2(50)", "VARCHAR2(60)", "VARCHAR2(100)", "VARCHAR2(200)":
 					maxLen := extractNumberFromString(campo["tipodato"])
-					tipoDato = fmt.Sprintf("string(%d)", maxLen)
+					tipoDato = fmt.Sprintf("string('%s', %d)", col, maxLen)
 				case "NUMBER(4,0)":
 					tipoDato = "integer"
 				case "CHAR(1)":
@@ -181,16 +181,15 @@ class %s extends Migration
 		}
 
 		if strings.ToLower(col) == "vigencia" {
-			fmt.Fprintf(migFile, "            $table->%s('%s')%s->default(VigenciaEnum::VIGENTE->value);%s\n",
-				tipoDato, col, nullable, comentario)
+			fmt.Fprintf(migFile, "            $table->%s->default(VigenciaEnum::VIGENTE->value);%s\n",
+				tipoDato, comentario)
 		} else {
-			fmt.Fprintf(migFile, "            $table->%s('%s')%s;%s\n",
-				tipoDato, col, nullable, comentario)
+			fmt.Fprintf(migFile, "            $table->%s%s;%s\n",
+				tipoDato, nullable, comentario)
 		}
 	}
 
-	fmt.Fprintf(migFile, `            $table->timestamps();
-        });
+	fmt.Fprintf(migFile, `        });
     }
 
     public function down(): void
@@ -233,6 +232,9 @@ class %s extends Model
     use HasFactory;
 
     protected $table = '%s';
+    
+    // No usar timestamps
+    public $timestamps = false;
     
 `, imports, modelName, tableName)
 
