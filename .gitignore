@@ -5,7 +5,6 @@
 sheet_summary.txt
 
 # Archivos de entrada Excel
-*.xlsx
 *.xls
 
 # Archivos binarios compilados
