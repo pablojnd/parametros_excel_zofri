@@ -1,0 +1,46 @@
+# Archivos y carpetas generados por el programa
+/database/
+/app/
+/output_csv/
+sheet_summary.txt
+
+# Archivos de entrada Excel
+*.xlsx
+*.xls
+
+# Archivos binarios compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+
+# Carpetas específicas de Go
+/bin/
+/pkg/
+/vendor/
+
+# Archivos de IDE y editores
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Archivos de log
+*.log
+
+# Archivos de sistema operativo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini

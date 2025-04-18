@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/xuri/excelize/v2" // Añadimos la importación de excelize
 )
 
 // generarArchivosLaravel genera todos los archivos necesarios para Laravel
@@ -19,7 +21,7 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 			fmt.Printf("⚠ No pude leer %q: %v\n", sheet, err)
 			continue
 		}
-		
+
 		rows := trimEmptyRows(rawRows)
 		if len(rows) < 2 {
 			fmt.Printf("⚠ %q sin datos, ignorada\n", sheet)
@@ -85,7 +87,7 @@ class %s extends Seeder
 		for i, cell := range row {
 			if i < len(headers) {
 				key := normalize(headers[i])
-				
+
 				// Manejo especial para campo de vigencia
 				if strings.ToLower(key) == "vigencia" {
 					vigenciaValue := "VigenciaEnum::NO_VIGENTE"
@@ -126,7 +128,7 @@ func generateMigration(migrationDir string, className string, tableName string, 
 	defer migFile.Close()
 
 	classMig := fmt.Sprintf("Create%sTable", className)
-	
+
 	fmt.Fprintf(migFile, `<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -145,12 +147,12 @@ class %s extends Migration
 	// Asociación de campos a tipos de dato Laravel según especificaciones
 	for _, h := range headers {
 		col := normalize(h)
-		
+
 		// Buscar el tipo de dato y descripción en campos
 		tipoDato := "string"
 		nullable := "->nullable()"
 		comentario := ""
-		
+
 		for _, campo := range campos {
 			if strings.EqualFold(campo["campo"], h) {
 				switch strings.ToUpper(campo["tipodato"]) {
@@ -168,7 +170,7 @@ class %s extends Migration
 						tipoDato = "char(1)"
 					}
 				}
-				
+
 				if campo["descripcion"] != "" {
 					if comentario == "" {
 						comentario = fmt.Sprintf(" // %s", campo["descripcion"])
@@ -177,12 +179,12 @@ class %s extends Migration
 				break
 			}
 		}
-		
+
 		if strings.ToLower(col) == "vigencia" {
-			fmt.Fprintf(migFile, "            $table->%s('%s')%s->default(VigenciaEnum::VIGENTE->value);%s\n", 
+			fmt.Fprintf(migFile, "            $table->%s('%s')%s->default(VigenciaEnum::VIGENTE->value);%s\n",
 				tipoDato, col, nullable, comentario)
 		} else {
-			fmt.Fprintf(migFile, "            $table->%s('%s')%s;%s\n", 
+			fmt.Fprintf(migFile, "            $table->%s('%s')%s;%s\n",
 				tipoDato, col, nullable, comentario)
 		}
 	}
@@ -213,8 +215,9 @@ func generateModel(modelDir string, modelName string, tableName string, headers 
 
 	// Determinar si tiene campo de vigencia
 	tieneVigencia := hasVigenciaField(headers)
-	
-	imports := "use Illuminate\Database\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Database\\Eloquent\\Model;"
+
+	// Corregimos las barras invertidas duplicadas en el string de imports
+	imports := "use Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Database\\Eloquent\\Model;"
 	if tieneVigencia {
 		imports += "\nuse App\\Enums\\VigenciaEnum;"
 	}
