@@ -27,7 +27,7 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 
 		rows := trimEmptyRows(rawRows)
 		if len(rows) < 2 {
-			fmt.Printf("⚠ %q sin datos, ignorada\n", sheet)
+			fmt.Printf("⚠ %q sin datos, ignorada\n", sheet, err)
 			continue
 		}
 
@@ -70,6 +70,7 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 }
 
 // generateSeeder crea un archivo seeder de Laravel
+// con soporte para lotes para evitar problemas de memoria
 func generateSeeder(seedDir string, className string, modelName string, headers []string, dataRows [][]string) error {
 	seedPath := filepath.Join(seedDir, className+".php")
 	seeder, err := os.Create(seedPath)
@@ -78,6 +79,10 @@ func generateSeeder(seedDir string, className string, modelName string, headers 
 	}
 	defer seeder.Close()
 
+	// Determinar si el seeder es grande (más de 500 filas)
+	isLargeSeeder := len(dataRows) > 500
+	chunkSize := 100 // Tamaño de cada lote para seeders grandes
+
 	fmt.Fprintf(seeder, `<?php
 
 namespace Database\Seeders;
@@ -85,46 +90,110 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\%s;
 use App\Enums\VigenciaEnum;
+use Illuminate\Support\Facades\DB;
 
 class %s extends Seeder
 {
     public function run()
     {
-        $data = [
 `, modelName, className)
 
-	for _, row := range dataRows {
-		fmt.Fprintln(seeder, "            [")
-		for i, cell := range row {
-			if i < len(headers) {
-				key := normalize(headers[i])
+	// Si es un seeder grande, usar enfoque por lotes con transacciones
+	if isLargeSeeder {
+		fmt.Fprintln(seeder, "        // Seeder grande - usando enfoque por lotes con transacciones")
+		// Corregir esta línea, evitando usar $chunkSize como variable de PHP
+		fmt.Fprintf(seeder, "        $this->command->info('Sembrando %s en lotes de %d registros...');\n",
+			className, chunkSize)
 
-				// Manejo especial para campo de vigencia
-				if strings.ToLower(key) == "vigencia" {
-					vigenciaValue := "VigenciaEnum::NO_VIGENTE"
-					if strings.ToUpper(cell) == "S" {
-						vigenciaValue = "VigenciaEnum::VIGENTE"
+		// Dividir data en lotes
+		for i := 0; i < len(dataRows); i += chunkSize {
+			end := i + chunkSize
+			if end > len(dataRows) {
+				end = len(dataRows)
+			}
+
+			fmt.Fprintf(seeder, "\n        // Lote %d de %d\n", (i/chunkSize)+1, (len(dataRows)+chunkSize-1)/chunkSize)
+			fmt.Fprintln(seeder, "        DB::transaction(function () {")
+			fmt.Fprintln(seeder, "            $data = [")
+
+			// Generar datos para este lote
+			for _, row := range dataRows[i:end] {
+				fmt.Fprintln(seeder, "                [")
+				for j, cell := range row {
+					if j < len(headers) {
+						key := normalize(headers[j])
+
+						// Manejar campo de vigencia y escapar caracteres especiales
+						if strings.ToLower(key) == "vigencia" {
+							vigenciaValue := "VigenciaEnum::NO_VIGENTE"
+							if strings.ToUpper(cell) == "S" {
+								vigenciaValue = "VigenciaEnum::VIGENTE"
+							}
+							fmt.Fprintf(seeder, "                    '%s' => %s,\n", key, vigenciaValue)
+						} else {
+							// Escapar comillas y caracteres especiales
+							escapedCell := escapeString(cell)
+							fmt.Fprintf(seeder, "                    '%s' => '%s',\n", key, escapedCell)
+						}
 					}
-					fmt.Fprintf(seeder, "                '%s' => %s,\n", key, vigenciaValue)
-				} else {
-					fmt.Fprintf(seeder, "                '%s' => '%s',\n", key, cell)
+				}
+				fmt.Fprintln(seeder, "                ],")
+			}
+
+			fmt.Fprintln(seeder, "            ];")
+			fmt.Fprintf(seeder, "            foreach ($data as $item) {\n                %s::create($item);\n            }\n", modelName)
+			fmt.Fprintln(seeder, "        });")
+		}
+	} else {
+		// Enfoque normal para seeders pequeños
+		fmt.Fprintln(seeder, "        $data = [")
+
+		for _, row := range dataRows {
+			fmt.Fprintln(seeder, "            [")
+			for i, cell := range row {
+				if i < len(headers) {
+					key := normalize(headers[i])
+
+					// Manejo especial para campo de vigencia
+					if strings.ToLower(key) == "vigencia" {
+						vigenciaValue := "VigenciaEnum::NO_VIGENTE"
+						if strings.ToUpper(cell) == "S" {
+							vigenciaValue = "VigenciaEnum::VIGENTE"
+						}
+						fmt.Fprintf(seeder, "                '%s' => %s,\n", key, vigenciaValue)
+					} else {
+						// Escapar comillas y caracteres especiales
+						escapedCell := escapeString(cell)
+						fmt.Fprintf(seeder, "                '%s' => '%s',\n", key, escapedCell)
+					}
 				}
 			}
+			fmt.Fprintln(seeder, "            ],")
 		}
-		fmt.Fprintln(seeder, "            ],")
+
+		fmt.Fprintf(seeder, `        ];
+
+        %s::insert($data);`, modelName)
 	}
 
-	fmt.Fprintf(seeder, `        ];
+	fmt.Fprintln(seeder, "\n    }")
+	fmt.Fprintln(seeder, "}")
 
-        foreach ($data as $item) {
-            %s::create($item);
-        }
-    }
-}
-`, modelName)
-
-	fmt.Printf("✅ Seeder: %s\n", seedPath)
+	fmt.Printf("✅ Seeder: %s (%d filas)\n", seedPath, len(dataRows))
 	return nil
+}
+
+// escapeString escapa caracteres especiales en strings para PHP
+func escapeString(s string) string {
+	// Reemplazar comillas simples por la secuencia de escape
+	s = strings.ReplaceAll(s, "'", "\\'")
+
+	// Eliminar caracteres potencialmente problemáticos o reemplazarlos
+	s = strings.ReplaceAll(s, "\r", " ")
+	s = strings.ReplaceAll(s, "\n", " ")
+
+	// Manejar otros caracteres especiales si es necesario
+	return s
 }
 
 // generateMigration crea un archivo de migración de Laravel 12
@@ -383,16 +452,18 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        // Para incrementar memoria disponible (si es necesario)
+        ini_set('memory_limit', '512M');
+
         // Parámetros Zofri
-        $this->call([
 `)
 
-	// Agregar cada seeder a la lista
+	// Agregar cada seeder de forma individual para mejor control
 	for _, seederClassName := range seederClassNames {
-		fmt.Fprintf(seeder, "            %s::class,\n", seederClassName)
+		fmt.Fprintf(seeder, "        $this->call(%s::class);\n", seederClassName)
 	}
 
-	fmt.Fprintf(seeder, `        ]);
+	fmt.Fprintf(seeder, `
     }
 }
 `)
@@ -406,8 +477,11 @@ func displayCommandHints() {
 	fmt.Println("\n📋 Comandos Laravel útiles:")
 	fmt.Println("  - Para migrar la base de datos:")
 	fmt.Println("    \033[36mphp artisan migrate\033[0m")
-	fmt.Println("  - Para ejecutar los seeders:")
+	fmt.Println("  - Para ejecutar los seeders (ejecutar uno por uno si hay problemas de memoria):")
 	fmt.Println("    \033[36mphp artisan db:seed\033[0m")
+	fmt.Println("    \033[36mphp artisan db:seed --class=NombreDelSeeder\033[0m")
+	fmt.Println("  - Para incrementar la memoria disponible para PHP:")
+	fmt.Println("    \033[36mphp -d memory_limit=512M artisan db:seed\033[0m")
 	fmt.Println("  - Para crear un nuevo modelo rápidamente:")
 	fmt.Println("    \033[36mphp artisan make:model -m ModelName\033[0m")
 	fmt.Println("  - Para regenerar la cache:")

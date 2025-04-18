@@ -49,6 +49,29 @@ php artisan migrate
 # Cargar todos los seeders
 php artisan db:seed
 
+# Para seeders muy grandes, aumentar límite de memoria
+php -d memory_limit=512M artisan db:seed
+
+# Para ejecutar un seeder específico (recomendado para tablas grandes)
+php artisan db:seed --class=ZofriAduanasSeeder
+
 # Regenerar cache
 php artisan optimize:clear
 ```
+
+## Solución a Problemas Comunes
+
+### Seeders demasiado grandes
+Si un seeder es muy grande y causa errores de memoria, el programa lo dividirá automáticamente en lotes de 100 registros. También puedes:
+
+1. Aumentar la memoria disponible para PHP:
+   ```
+   php -d memory_limit=1G artisan db:seed
+   ```
+
+2. Ejecutar cada seeder individualmente:
+   ```
+   php artisan db:seed --class=NombreDelSeeder
+   ```
+
+3. Editar el DatabaseSeeder y comentar los seeders que ya se han ejecutado.
