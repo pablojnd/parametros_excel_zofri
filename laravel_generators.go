@@ -15,6 +15,9 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 	// Extraer información de tipos de datos desde el input
 	tiposDeCampos := extraerEstructuraCampos()
 
+	// Guardar nombres de seeders para el DatabaseSeeder
+	var seederClassNames []string
+
 	for _, sheet := range sheets {
 		rawRows, err := f.GetRows(sheet)
 		if err != nil {
@@ -42,6 +45,8 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 		seederClassName := "Zofri" + className + "Seeder" // Añadir "Zofri" al nombre del seeder
 		if err := generateSeeder(seedDir, seederClassName, modelName, headers, dataRows); err != nil {
 			fmt.Printf("⚠ Error al generar seeder para %q: %v\n", sheet, err)
+		} else {
+			seederClassNames = append(seederClassNames, seederClassName)
 		}
 
 		// Generar Migración
@@ -55,7 +60,13 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 		}
 	}
 
+	// Generar el DatabaseSeeder que incluye todos los seeders
+	if err := generateDatabaseSeeder(seedDir, seederClassNames); err != nil {
+		fmt.Printf("⚠ Error al generar DatabaseSeeder: %v\n", err)
+	}
+
 	fmt.Println("\n✅ Archivos Laravel generados correctamente")
+	displayCommandHints()
 }
 
 // generateSeeder crea un archivo seeder de Laravel
@@ -116,7 +127,7 @@ class %s extends Seeder
 	return nil
 }
 
-// generateMigration crea un archivo de migración de Laravel
+// generateMigration crea un archivo de migración de Laravel 12
 func generateMigration(migrationDir string, className string, tableName string, headers []string, campos []map[string]string) error {
 	timestamp := time.Now().Format("2006_01_02_150405")
 	fileName := fmt.Sprintf("%s_create_%s_table.php", timestamp, tableName)
@@ -127,8 +138,6 @@ func generateMigration(migrationDir string, className string, tableName string, 
 	}
 	defer migFile.Close()
 
-	classMig := fmt.Sprintf("CreateZofri%sTable", className) // Asegurar que siempre incluye "Zofri"
-
 	fmt.Fprintf(migFile, `<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -136,13 +145,16 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Enums\VigenciaEnum;
 
-class %s extends Migration
+return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('%s', function (Blueprint $table) {
             $table->id();
-`, classMig, tableName)
+`, tableName)
 
 	// Asociación de campos a tipos de dato Laravel según especificaciones
 	for _, h := range headers {
@@ -160,15 +172,17 @@ class %s extends Migration
 					maxLen := extractNumberFromString(campo["tipodato"])
 					tipoDato = fmt.Sprintf("string('%s', %d)", col, maxLen)
 				case "NUMBER(4,0)":
-					tipoDato = "integer"
+					tipoDato = fmt.Sprintf("integer('%s')", col)
 				case "CHAR(1)":
 					if strings.ToLower(col) == "vigencia" {
-						tipoDato = "string"
+						tipoDato = fmt.Sprintf("string('%s', 1)", col)
 						nullable = ""
 						comentario = " // Utiliza VigenciaEnum"
 					} else {
-						tipoDato = "char(1)"
+						tipoDato = fmt.Sprintf("char('%s', 1)", col)
 					}
+				default:
+					tipoDato = fmt.Sprintf("string('%s')", col)
 				}
 
 				if campo["descripcion"] != "" {
@@ -178,6 +192,11 @@ class %s extends Migration
 				}
 				break
 			}
+		}
+
+		// Si no se encontró información específica, usar valor predeterminado
+		if !strings.Contains(tipoDato, "'"+col+"'") {
+			tipoDato = fmt.Sprintf("string('%s')", col)
 		}
 
 		if strings.ToLower(col) == "vigencia" {
@@ -192,11 +211,14 @@ class %s extends Migration
 	fmt.Fprintf(migFile, `        });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('%s');
     }
-}
+};
 `, tableName)
 
 	fmt.Printf("✅ Migración: %s\n", migPath)
@@ -328,4 +350,66 @@ func extractNumberFromString(str string) int {
 		return num
 	}
 	return 255 // valor por defecto
+}
+
+// generateDatabaseSeeder crea el DatabaseSeeder que incluye todos los seeders generados
+func generateDatabaseSeeder(seedDir string, seederClassNames []string) error {
+	seedPath := filepath.Join(seedDir, "DatabaseSeeder.php")
+	seeder, err := os.Create(seedPath)
+	if err != nil {
+		return err
+	}
+	defer seeder.Close()
+
+	fmt.Fprintf(seeder, `<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    /**
+     * Seed the application's database.
+     */
+    public function run(): void
+    {
+        // User::factory(10)->create();
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+
+        // Parámetros Zofri
+        $this->call([
+`)
+
+	// Agregar cada seeder a la lista
+	for _, seederClassName := range seederClassNames {
+		fmt.Fprintf(seeder, "            %s::class,\n", seederClassName)
+	}
+
+	fmt.Fprintf(seeder, `        ]);
+    }
+}
+`)
+
+	fmt.Printf("✅ DatabaseSeeder: %s\n", seedPath)
+	return nil
+}
+
+// displayCommandHints muestra sugerencias de comandos Laravel útiles
+func displayCommandHints() {
+	fmt.Println("\n📋 Comandos Laravel útiles:")
+	fmt.Println("  - Para migrar la base de datos:")
+	fmt.Println("    \033[36mphp artisan migrate\033[0m")
+	fmt.Println("  - Para ejecutar los seeders:")
+	fmt.Println("    \033[36mphp artisan db:seed\033[0m")
+	fmt.Println("  - Para crear un nuevo modelo rápidamente:")
+	fmt.Println("    \033[36mphp artisan make:model -m ModelName\033[0m")
+	fmt.Println("  - Para regenerar la cache:")
+	fmt.Println("    \033[36mphp artisan optimize:clear\033[0m")
 }

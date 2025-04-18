@@ -5,6 +5,7 @@ Esta herramienta permite procesar archivos de Excel con parámetros y generar au
 - Migraciones de Laravel
 - Modelos Eloquent
 - Seeders con datos
+- DatabaseSeeder configurado para cargar todos los seeders
 - Archivos CSV
 - Resúmenes de los datos
 
@@ -15,6 +16,7 @@ Esta herramienta permite procesar archivos de Excel con parámetros y generar au
 - Crea migraciones con tipos de datos apropiados
 - Genera modelos con casts para enums
 - Exporta datos a CSV
+- Crea un DatabaseSeeder que incluye todos los seeders generados
 
 ## Uso
 
@@ -35,3 +37,18 @@ Luego seleccione una opción:
 - Los modelos se generan en `app/Models/`
 - Los enums se generan en `app/Enums/`
 - Los CSV se generan en `output_csv/`
+
+## Comandos Laravel Útiles
+
+Después de copiar los archivos a tu proyecto Laravel:
+
+```bash
+# Ejecutar migraciones
+php artisan migrate
+
+# Cargar todos los seeders
+php artisan db:seed
+
+# Regenerar cache
+php artisan optimize:clear
+```

@@ -87,6 +87,9 @@ func main() {
 
 		// Procesamos las hojas del Excel para Laravel
 		generarArchivosLaravel(f, sheets, seedDir, migrationDir, modelDir)
+
+		fmt.Println("\n\033[32m🚀 Todos los archivos Laravel han sido generados correctamente\033[0m")
+		fmt.Println("\033[33mRecuerda copiar estos archivos a tu proyecto Laravel antes de ejecutar las migraciones y seeders\033[0m")
 		return
 
 	default:
