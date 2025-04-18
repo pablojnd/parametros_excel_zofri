@@ -207,6 +207,11 @@ func generateMigration(migrationDir string, className string, tableName string, 
 	}
 	defer migFile.Close()
 
+	// Generar descripción de la tabla basada en su nombre
+	tableDescription := strings.ReplaceAll(tableName, "zofri_", "")
+	tableDescription = strings.ReplaceAll(tableDescription, "_", " ")
+	tableDescription = strings.Title(tableDescription)
+
 	fmt.Fprintf(migFile, `<?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -214,6 +219,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Enums\VigenciaEnum;
 
+/**
+ * Migración para tabla de %s.
+ * 
+ * Esta tabla almacena información sobre %s en el sistema Zofri.
+ */
 return new class extends Migration
 {
     /**
@@ -223,7 +233,7 @@ return new class extends Migration
     {
         Schema::create('%s', function (Blueprint $table) {
             $table->id();
-`, tableName)
+`, tableDescription, tableDescription, tableName)
 
 	// Asociación de campos a tipos de dato Laravel según especificaciones
 	for _, h := range headers {
@@ -246,7 +256,7 @@ return new class extends Migration
 					if strings.ToLower(col) == "vigencia" {
 						tipoDato = fmt.Sprintf("string('%s', 1)", col)
 						nullable = ""
-						comentario = " // Utiliza VigenciaEnum"
+						comentario = " // Utiliza VigenciaEnum para estado de vigencia (S/N)"
 					} else {
 						tipoDato = fmt.Sprintf("char('%s', 1)", col)
 					}
@@ -445,25 +455,27 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Crear usuario administrador
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('admin123'),
+            'email_verified_at' => now(),
         ]);
 
         // Para incrementar memoria disponible (si es necesario)
         ini_set('memory_limit', '512M');
 
-        // Parámetros Zofri
+        // Parámetros Zofri - Usando un array para mejor mantenibilidad
+        $this->call([
 `)
 
-	// Agregar cada seeder de forma individual para mejor control
+	// Agregar cada seeder al array
 	for _, seederClassName := range seederClassNames {
-		fmt.Fprintf(seeder, "        $this->call(%s::class);\n", seederClassName)
+		fmt.Fprintf(seeder, "            %s::class,\n", seederClassName)
 	}
 
-	fmt.Fprintf(seeder, `
+	fmt.Fprintf(seeder, `        ]);
     }
 }
 `)
