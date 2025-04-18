@@ -1,0 +1,439 @@
+========================================
+        RESUMEN DE HOJAS EXCEL
+========================================
+
+----------------------------------------
+
+Hoja: Aduanas
+Encabezados: codigo, nombre, vigencia
+Total de registros: 17
+
+Primeros 5 registros:
+ 1) 3 | ARICA | S
+ 2) 7 | IQUIQUE | S
+ 3) 10 | TOCOPILLA | S
+ 4) 14 | ANTOFAGASTA | S
+ 5) 17 | CHAÑARAL | S
+
+----------------------------------------
+
+Hoja: Aranceles de Vehículos
+Encabezados: codigo
+Total de registros: 140
+
+Primeros 5 registros:
+ 1) 87031000
+ 2) 87032110
+ 3) 87032120
+ 4) 87032130
+ 5) 87032191
+
+----------------------------------------
+
+Hoja: Avanzadas Aduaneras
+Encabezados: codigo, nombre, descripcion, aduana_codigo, vigencia
+Total de registros: 80
+
+Primeros 5 registros:
+ 1) 3 | ARICA | ARICA | 3 | S
+ 2) 4 | VISVIRI | VISVIRI | 3 | S
+ 3) 5 | CHUNGARA | CHUNGARA | 3 | S
+ 4) 6 | CHACALLUTA | CHACALLUTA | 3 | S
+ 5) 7 | IQUIQUE | IQUIQUE | 7 | S
+
+----------------------------------------
+
+Hoja: Códigos Arancelarios
+Encabezados: codigo, nombre, descripcion, unidad_de_medida_codigo, vigencia
+Total de registros: 7786
+
+Primeros 5 registros:
+ 1) 00010100 | IMPORTACIONES CARACTER RESERVADO FF.AA,CARABINEROS E INVESTIGACIONES | IMPORTACIONES CARACTER RESERVADO FF.AA,CARABINEROS E INVESTIGACIONES | 6 | S
+ 2) 00019900 | OTROS PERTRECHOS ESTADO CONSIGNADOS FF.AA,CARABINEROS E INVESTIGACIONES | OTROS PERTRECHOS ESTADO CONSIGNADOS FF.AA,CARABINEROS E INVESTIGACIONES | 6 | S
+ 3) 00020000 | ARREOS MILITARES Y ARTICULOS FABRICACION UNIFORMES IMPORTADOS POR FF.AA. | ARREOS MILITARES Y ARTICULOS FABRICACION UNIFORMES IMPORTADOS POR FF.AA. | 6 | S
+ 4) 00030000 | REPUESTOS, ACCESORIOS Y/O ELEMENTOS PARA AVIONES,MAESTRANZAS,AEROPUERTOS | REPUESTOS, ACCESORIOS Y/O ELEMENTOS PARA AVIONES,MAESTRANZAS,AEROPUERTOS | 6 | S
+ 5) 00040100 | EFECTOS,MENAJE,EMBARCACION,VEHICULO EE.DEPENDIENTES MINISTERIO RR.EE. | EFECTOS,MENAJE,EMBARCACION,VEHICULO EE.DEPENDIENTES MINISTERIO RR.EE. | 6 | S
+
+----------------------------------------
+
+Hoja: Condiciones de Venta
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) CTDO | CONTADO | CONTADO | S
+ 2) CRED | CRÉDITO | CRÉDITO | S
+
+----------------------------------------
+
+Hoja: Descriptores
+Encabezados: codigo, nombre, descripcion, etiqueta_impresion, tipo_de_dato_codigo, lista_de_valor_codigo, enteros, decimales, obligatoriedad, vigencia
+Total de registros: 59
+
+Primeros 5 registros:
+ 1) 1 | Nombre Del Producto | Nombre de la Mercancía            | Nombre | ALFANUM |  | 0 | 0 | D | S
+ 2) 2 | Modelo | Modelo de la Mercancía | Modelo | ALFANUM |  | 0 | 0 | D | S
+ 3) 3 | Tipo | Tipo | Tipo | ALFANUM |  | 0 | 0 | D | S
+ 4) 4 | Marca del Producto | Marca del Producto | Marca | ALFANUM |  | 0 | 0 | D | S
+ 5) 5 | Año | Año | Año | NUME |  | 4 | 0 |  | S
+
+----------------------------------------
+
+Hoja: Descriptores por Arancel
+Encabezados: codigo_arancelario, descriptor_codigo
+Total de registros: 21885
+
+Primeros 5 registros:
+ 1) 00010100 | 1
+ 2) 00010100 | 3
+ 3) 00010100 | 4
+ 4) 00019900 | 1
+ 5) 00019900 | 3
+
+----------------------------------------
+
+Hoja: Destinos
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 6
+
+Primeros 5 registros:
+ 1) EXT | EXTRANJERO | EXTRANJERO | S
+ 2) ZFE | ZONA FRANCA DE EXTENSION | ZONA FRANCA DE EXTENSION | S
+ 3) RDP | RESTO DEL PAIS | RESTO DEL PAIS | S
+ 4) OZF | OTRA ZONA FRANCA | OTRA ZONA FRANCA | S
+ 5) ZDE | ZONA DE EXPORTACION | ZONA DE EXPORTACION | S
+
+----------------------------------------
+
+Hoja: Estados Documentos
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 8
+
+Primeros 5 registros:
+ 1) BORRADOR | BORRADOR | BORRADOR | S
+ 2) PENDIENTE | PENDIENTE DE VISACIÓN | PENDIENTE DE VISACIÓN | S
+ 3) RECHAZADO | RECHAZADO | RECHAZADO | S
+ 4) ELIMINADO | ELIMINADO | ELIMINADO | S
+ 5) VISADO | VISADO | VISADO | S
+
+----------------------------------------
+
+Hoja: Formatos de Archivo
+Encabezados: codigo, nombre
+Total de registros: 3
+
+Primeros 5 registros:
+ 1) PDF | PDF
+ 2) CSV | EXCEL
+ 3) XML | XML
+
+----------------------------------------
+
+Hoja: Listas de Valores
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 7
+
+Primeros 5 registros:
+ 1) 01 | Tipos de Vehículos | Tipos de Vehículos | S
+ 2) 02 | Tipos de Cabina | Tipo de Cabina | S
+ 3) 03 | Colores | Colores | S
+ 4) 04 | Marcas de Vehículo | Marcas de Vehículo | S
+ 5) 05 | Tipos de Encedido | Tipos de Encedido | S
+
+----------------------------------------
+
+Hoja: Localidades
+Encabezados: codigo, nombre, descripcion, aduana_codigo, vigencia
+Total de registros: 3
+
+Primeros 5 registros:
+ 1) IQQ | IQUIQUE | IQUIQUE | 7 | S
+ 2) AHO | ALTO HOSPOCIO | ALTO HOSPOCIO | 7 | S
+ 3) ARI | ARICA | ARICA | 3 | S
+
+----------------------------------------
+
+Hoja: Medios de Transporte
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 11
+
+Primeros 5 registros:
+ 1) 1 | MARITIMA,FLUVIAL Y L | MARITIMA,FLUVIAL Y L | S
+ 2) 2 | FLUVIAL | FLUVIAL | S
+ 3) 3 | LACUSTRE | LACUSTRE | S
+ 4) 4 | AEREO | AEREO | S
+ 5) 5 | POSTAL | POSTAL | S
+
+----------------------------------------
+
+Hoja: Monedas
+Encabezados: codigo, nombre, descripcion, simbolo, vigencia
+Total de registros: 71
+
+Primeros 5 registros:
+ 1) 1 | PESO | PESO ARGENTINO |  | S
+ 2) 4 | BOLIVIANO | BOLIVIANO |  | S
+ 3) 5 | CRUZEIRO REAL | CRUZEIRO REAL |  | S
+ 4) 6 | DÓLAR CAN | DÓLAR |  | S
+ 5) 13 | DÓLAR USA | DÓLAR | USD$ | S
+
+----------------------------------------
+
+Hoja: Organismos Externos
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 21
+
+Primeros 5 registros:
+ 1) 1 | SAG | SERVICIO AGRÍCOLA GANADERO | S
+ 2) 2 | SNS | SERVICIO SALUD | S
+ 3) 3 | SAG y SNS | SAG Y SALUD | S
+ 4) 4 | D. GRAL. MOV. NAC. | DIRECCIÓN GENERAL DE MOVILIZACIÓN NACIONAL | S
+ 5) 5 | SERNAPESCA | SERVICIO NACIONAL DE PESCA | S
+
+----------------------------------------
+
+Hoja: Paises
+Encabezados: codigo, nombre, vigencia
+Total de registros: 255
+
+Primeros 5 registros:
+ 1) 101 | SENEGAL | S
+ 2) 102 | GAMBIA | S
+ 3) 103 | GUINEA-BISSAU | S
+ 4) 104 | GUINEA | S
+ 5) 105 | SIERRA LEONA | S
+
+----------------------------------------
+
+Hoja: Procedencias
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 6
+
+Primeros 5 registros:
+ 1) EXT | EXTRANJERO | EXTRANJERO | S
+ 2) ZFE | ZONA FRANCA DE EXTENSION | ZONA FRANCA DE EXTENSION | S
+ 3) RDP | RESTO DEL PAIS | RESTO DEL PAIS | S
+ 4) OZF | OTRA ZONA FRANCA | OTRA ZONA FRANCA | S
+ 5) ZDE | ZONA DE EXPORTACION | ZONA DE EXPORTACION | S
+
+----------------------------------------
+
+Hoja: Puertos de Embarque
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 328
+
+Primeros 5 registros:
+ 1) 111 | MONTREAL | MONTREAL | S
+ 2) 112 | COSTA DEL PACÍFICO, OTROS NO ESPECIFICADOS | COSTA DEL PACÍFICO, OTROS NO ESPECIFICADOS | S
+ 3) 113 | HALIFAX | HALIFAX | S
+ 4) 114 | VANCOUVER | VANCOUVER | S
+ 5) 115 | SAINT JOHN | SAINT JOHN | S
+
+----------------------------------------
+
+Hoja: Regiones
+Encabezados: codigo, nombre
+Total de registros: 15
+
+Primeros 5 registros:
+ 1) 01 | 01-REGION DE TARAPACA
+ 2) 02 | 02-REGION DE ANTOFAGASTA
+ 3) 03 | 03-REGION DE ATACAMA
+ 4) 04 | 04-REGION DE COQUIMBO
+ 5) 05 | 05-REGION DE VALPARAISO
+
+----------------------------------------
+
+Hoja: Tipos de Adjunto
+Encabezados: codigo, nombre
+Total de registros: 11
+
+Primeros 5 registros:
+ 1) ADJ001 | Facturas
+ 2) ADJ002 | Certificado de Seguro
+ 3) ADJ003 | Manifiesto
+ 4) ADJ004 | Declaración de Trasbordo
+ 5) ADJ005 | Declaración de Redestinación
+
+----------------------------------------
+
+Hoja: Tipos de Bulto
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 70
+
+Primeros 5 registros:
+ 1) 1 | POLVO | GRANEL SÓLIDO, PARTICULAS FINAS (POLVO) | S
+ 2) 2 | GRANOS | GRANEL SÓLIDO, PARTICULAS GRANULARES (GRANOS) | S
+ 3) 3 | NÓDULOS | GRANEL SÓLIDO, PARTICULAS GRANDES (NÓDULOS) | S
+ 4) 4 | LÍQUIDO | GRANEL LÍQUIDO | S
+ 5) 5 | GAS | GRANEL GASEOSO | S
+
+----------------------------------------
+
+Hoja: Tipos de Certificado
+Encabezados: codigo, nombre
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) M | MANUAL
+ 2) E | ELECTRONICO
+
+----------------------------------------
+
+Hoja: Tipos de Clausula
+Encabezados: codigo, nombre
+Total de registros: 3
+
+Primeros 5 registros:
+ 1) F | FOB
+ 2) C | CIF
+ 3) L | COSTO Y FLETE
+
+----------------------------------------
+
+Hoja: Tipos de Contenedor
+Encabezados: codigo, nombre
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) TCON_CONT | CONTENEDOR
+ 2) TCON_CAMI | CAMION
+
+----------------------------------------
+
+Hoja: Tipos de Dato Descriptor
+Encabezados: codigo, nombre
+Total de registros: 4
+
+Primeros 5 registros:
+ 1) NUME | Numérico
+ 2) ALFANUM | Alfa numérico
+ 3) FECHA | Fecha
+ 4) LISTA | Lista
+
+----------------------------------------
+
+Hoja: Tipos de Documento
+Encabezados: codigo, nombre, vigencia
+Total de registros: 62
+
+Primeros 5 registros:
+ 1) 101 | DECLARACIÓN DE INGRESO A ZONA FRANCA | S
+ 2) 103 | TRASPASO DE MERCANCIAS | S
+ 3) 104 | INFORME DE PRODUCCION O TRANSFORMACION | S
+ 4) 201 | DECLARACIÓN DE SALIDA DE ZONA FRANCA | S
+ 5) 202 | VENTAS AL DETALLE | S
+
+----------------------------------------
+
+Hoja: Tipos de Inventario
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 3
+
+Primeros 5 registros:
+ 1) A | ACTUAL | INVENTARIO ACTUAL | S
+ 2) M | MESUAL | INVENTARIO MENSUAL | S
+ 3) F | FECHA DE CORTE | INVENTARIO SEGÚN FECHA DE CORTE | S
+
+----------------------------------------
+
+Hoja: Tipos de Garantía
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 3
+
+Primeros 5 registros:
+ 1) G | GLOBAL | GARANTIA GLOBAL | S
+ 2) O | OCASIONAL | GARANTIA OCASIONAL | S
+ 3) D | DESCONTABLE | GARANTIA DESCONTABLE | S
+
+----------------------------------------
+
+Hoja: Tipos de Resolución Aduanera
+Encabezados: codigo, nombre
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) ANULDOCU | ANULACIÓN
+ 2) ACTSTOK | ACTUALIZACION DE STOCK
+
+----------------------------------------
+
+Hoja: Tipos de Trámite
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 4
+
+Primeros 5 registros:
+ 1) A | ANTICIPADO | TIPO DE TRAMITE ANTICIPADO | S
+ 2) N | NORMAL | TIPO DE TRAMITE NORMAL | S
+ 3) LEY18110 | LEY 18.110 | TIPO DE TRAMITE LEY 18.110 | S
+ 4) ART21 | ART. 21 | TIPO DE TRAMITE ART. 21 | S
+
+----------------------------------------
+
+Hoja: Unidades de Medida
+Encabezados: codigo, nombre, descripcion, sigla, vigencia
+Total de registros: 38
+
+Primeros 5 registros:
+ 1) 1 | TONELADA METRICA BRUTA | TONELADA METRICA BRUTA | TMB | S
+ 2) 2 | QUINTAL METRICO BRUTO | QUINTAL METRICO BRUTO | QMB | S
+ 3) 3 | 1000 KILOWATT HORA | 1000 KILOWATT HORA | MKWH | S
+ 4) 4 | TONELADA METRICA NETA | TONELADA METRICA NETA | TMN | S
+ 5) 5 | KILATE | KILATE | KLT | S
+
+----------------------------------------
+
+Hoja: Valores de Listas de Valor
+Encabezados: codigo, nombre, descripcion, lista_de_valor_codigo, vigencia
+Total de registros: 5405
+
+Primeros 5 registros:
+ 1) 1 | AUTOMOVIL | AUTOMOVIL | 01 | S
+ 2) 2 | BUS | BUS | 01 | S
+ 3) 3 | CAMION | CAMION | 01 | S
+ 4) 4 | CAMIONETA | CAMIONETA | 01 | S
+ 5) 5 | CHASIS | CHASIS | 01 | S
+
+----------------------------------------
+
+Hoja: Vías de Ingreso
+Encabezados: codigo, nombre
+Total de registros: 4
+
+Primeros 5 registros:
+ 1) VIAINGR01  | Aplicación
+ 2) VIAINGR02  | Web Service
+ 3) VIAINGR03  | Upload
+ 4) VIAINGR04  | Migracion
+
+----------------------------------------
+
+Hoja: Zonas de Exportación
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 1
+
+Primeros 5 registros:
+ 1) 1 | SOPRODI S.A. ARICA | SOPRODI S.A. ARICA | S
+
+----------------------------------------
+
+Hoja: Zonas Francas
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) 952 | ZONA FRANCA IQUIQUE | ZONA FRANCA IQUIQUE | S
+ 2) 953 | ZONA FRANCA PUNTA ARENAS | ZONA FRANCA PUNTA ARENAS | S
+
+----------------------------------------
+
+Hoja: Zonas Francas de Extensión
+Encabezados: codigo, nombre, descripcion, vigencia
+Total de registros: 2
+
+Primeros 5 registros:
+ 1) 80 | ARICA   | ARICA   | S
+ 2) 81 | IQUIQUE   | IQUIQUE   | S
+
+----------------------------------------
+

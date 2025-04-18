@@ -1,0 +1,60 @@
+codigo,nombre,descripcion,etiqueta_impresion,tipo_de_dato_codigo,lista_de_valor_codigo,enteros,decimales,obligatoriedad,vigencia
+1,Nombre Del Producto,Nombre de la Mercancía           ,Nombre,ALFANUM,,0,0,D,S
+2,Modelo,Modelo de la Mercancía,Modelo,ALFANUM,,0,0,D,S
+3,Tipo,Tipo,Tipo,ALFANUM,,0,0,D,S
+4,Marca del Producto,Marca del Producto,Marca,ALFANUM,,0,0,D,S
+5,Año,Año,Año,NUME,,4,0,,S
+6,Tipo de Encendido,Tipo de Encendido,Encend,LISTA,05,0,0,,S
+7,Número de Serie,Número de Serie,N° Serie,ALFANUM,,0,0,,S
+8,Número de Chassis,Número de Chassis,Chassis,ALFANUM,,0,0,,S
+9,Número de Motor,Número de Motor,Motor,ALFANUM,,0,0,,S
+10,Cilindrada,Cilindrada,Cilind,NUME,,5,2,,S
+11,Peso Total con Carga Máxima,Peso Total con Carga Máxima,Peso.Tot.Carg.Max.,NUME,,6,2,,S
+12,Asientos,Asientos,Asientos,NUME,,3,0,,S
+13,Tipo Cabina,Tipo Cabina,Cabina,LISTA,02,0,0,,S
+14,Capacidad Carga Util en Kgrs.,Capacidad Carga Util en Kgrs.,Cap.Carg.Util.Kg.,NUME,,6,2,,S
+15,Capacidad Carga Util en Tonel. Mts.,Capacidad Carga Util en Tonel. Mts.,Cap.Carg.Util.Ton.,NUME,,6,2,,S
+16,Sistema de Tracción,Sistema de Tracción,Tracción,LISTA,06,0,0,,S
+17,Descripción,Descripción,Descrip,ALFANUM,,0,0,,S
+18,Tipo de Vehículo,Tipo de Vehículo,T.Vehic,LISTA,01,0,0,,S
+19,Color Unico,Color Unico,Color,LISTA,03,0,0,,S
+20,Color 1,Color 1,Color,LISTA,03,0,0,,S
+21,Color 2,Color 2,Color,LISTA,03,0,0,,S
+22,Color 3,Color 3,Color,LISTA,03,0,0,,S
+23,Código Producto,Código Producto,Cod.Prod,ALFANUM,,0,0,,S
+24,Información Adicional,Información Adicional,Inf.Adic.,ALFANUM,,0,0,G,S
+25,Nombre comercial,Nombre comercial,Nomb.Come,ALFANUM,,0,0,,S
+26,Composición (%),Composición (%),Comp%,NUME,,3,2,,S
+27,Material Capellada,Material Capellada,Mat.Capellada,ALFANUM,,0,0,,S
+28,Material Planta,Material Planta,Mat.Planta,ALFANUM,,0,0,,S
+29,Peso,Peso,Peso,NUME,,6,2,,S
+30,Talla,Talla,Talla,NUME,,5,2,,S
+31,Presentación,Presentación,Presentación,ALFANUM,,0,0,,S
+32,Tipo envase,Tipo envase,T.Env,ALFANUM,,0,0,,S
+33,Tipo de producto,Tipo de producto,T.Prod,ALFANUM,,0,0,,S
+34,Fabricante,Fabricante,Fab,ALFANUM,,0,0,,S
+35,Año Fabricación,Año Fabricación,Año,NUME,,4,0,,S
+36,Variedad,Variedad,Var,ALFANUM,,0,0,,S
+37,Capacidad de Envase (Kg),Capacidad de Envase (Kg),Cap.Env.KG,NUME,,6,2,,S
+38,Capacidad (Mb),Capacidad (Mb),Cap.MB,NUME,,6,2,,S
+39,Capacidad de Envase (gr),Capacidad de Envase (gr),Cap.Env.GR,NUME,,6,2,,S
+40,Capacidad de Envase (cl),Capacidad de Envase (cl),Cap.Env.CL,NUME,,6,2,,S
+41,Capacidad de Envase (cc),Capacidad de Envase (cc),Cap.Env.CC,NUME,,6,2,,S
+42,Capacidad de Envase (ml),Capacidad de Envase (ml),Cap.Env.ML,NUME,,6,2,,S
+43,Capacidad de Envase (N° de Unidades),Capacidad de Envase (N° de Unidades),Cap.Env.UN,NUME,,6,2,,S
+44,Capacidad de Envase (N° de Cigarrillos),Capacidad de Envase (N° de Cigarrillos),Cap.Env.CIG,NUME,,6,2,,S
+45,Tipo de Software,Tipo de Software,T.Soft,ALFANUM,,0,0,,S
+46,Nombre de Software,Nombre de Software,Software,ALFANUM,,0,0,,S
+47,Marca de Software,Marca de Software,Marca.Soft,ALFANUM,,0,0,,S
+48,Numeración (Francesa),Numeración (Francesa),Num.Francesa,ALFANUM,,0,0,,S
+49,Marca del Vehículo,Marca del Vehículo,Marca.Vhc,LISTA,04,0,0,,S
+50,Tipo de Combustible,Tipo de Combustible,Combustible,LISTA,07,0,0,,S
+51,Vehículo de destino,Vehículo de destino,Vehi.Destino,LISTA,01,0,0,,S
+52,Carga Máxima Kgs.,Carga Máxima en Kgs.,Carg.Max.Kgs,NUME,,6,2,,S
+53,Carga Máxima Ton.,Carga Máxima en Toneladas,Carg.Max.Ton,NUME,,6,2,,S
+54,Colores,Colores,Colores,ALFANUM,,0,0,,S
+55,Peso Total Kgs.,Peso Total en Kgs.,Peso.Tot.Kgs,NUME,,6,2,,S
+56,Peso Total Ton.,Peso Total en Toneladas,Peso.Tot.Ton,NUME,,6,2,,S
+57,Puertas,Cantidad Puertas,Puertas,NUME,,2,0,,S
+58,Tracción Migrada,Sistema de Tracción Migrada desde SVR,Tracción,ALFANUM,,0,0,,N
+59,Tipo de Item Migrado,Tipo de Item Migrado desde SVR,T.Item,ALFANUM,,0,0,,N
