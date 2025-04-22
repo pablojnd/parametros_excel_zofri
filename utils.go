@@ -5,7 +5,8 @@ import (
 	"unicode"
 )
 
-// toClassName: "Mi Hoja" -> "MiHoja"
+// Estas funciones siguen aquí para compatibilidad, pero también están disponibles en el paquete generators
+
 func toClassName(s string) string {
 	var parts []string
 	for _, w := range strings.FieldsFunc(s, func(r rune) bool {
@@ -16,7 +17,6 @@ func toClassName(s string) string {
 	return strings.Join(parts, "")
 }
 
-// normalize convierte a snake_case sin tildes
 func normalize(s string) string {
 	s = strings.ToLower(s)
 	r := strings.NewReplacer(

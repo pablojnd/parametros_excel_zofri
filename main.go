@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/xuri/excelize/v2"
+	"github.com/zofri/parametros_excel/generators"
 )
 
 func main() {
@@ -81,9 +82,10 @@ func main() {
 		os.MkdirAll(migrationDir, 0755)
 		os.MkdirAll(modelDir, 0755)
 		os.MkdirAll(enumDir, 0755)
+		os.MkdirAll(modelDir+"/Parametros", 0755) // Crear subdirectorio para modelos de parámetros
 
 		// Generamos los enums primero
-		generateEnums(enumDir)
+		generators.GenerateEnums(enumDir)
 
 		// Procesamos las hojas del Excel para Laravel
 		generarArchivosLaravel(f, sheets, seedDir, migrationDir, modelDir)

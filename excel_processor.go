@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/xuri/excelize/v2"
+	"github.com/zofri/parametros_excel/generators"
 )
 
 // processExcelSheets procesa todas las hojas del Excel y genera los archivos correspondientes
@@ -25,7 +26,7 @@ func processExcelSheets(f *excelize.File, sheets []string, seedDir, migrationDir
 
 		rows := trimEmptyRows(rawRows)
 		if len(rows) < 2 {
-			fmt.Printf("⚠ %q sin datos, ignorada\n", sheet, err)
+			fmt.Printf("⚠ %q sin datos, ignorada\n", sheet)
 			continue
 		}
 
@@ -35,23 +36,23 @@ func processExcelSheets(f *excelize.File, sheets []string, seedDir, migrationDir
 		// Obtener campos específicos para esta tabla
 		camposTabla := obtenerCamposTabla(sheet, tiposDeCampos)
 
-		className := toClassName(sheet)
+		className := generators.ToClassName(sheet)
 		modelName := "Zofri" + className
-		tableName := "zofri_" + normalize(sheet)
+		tableName := "zofri_" + generators.Normalize(sheet)
 
 		// Generar Seeder PHP
 		seederClassName := className + "Seeder"
-		if err := generateSeeder(seedDir, seederClassName, modelName, headers, dataRows); err != nil {
+		if err := generators.GenerateSeeder(seedDir, seederClassName, modelName, headers, dataRows); err != nil {
 			fmt.Printf("⚠ Error al generar seeder para %q: %v\n", sheet, err)
 		}
 
 		// Generar Migración
-		if err := generateMigration(migrationDir, className, tableName, headers, camposTabla); err != nil {
+		if err := generators.GenerateMigration(migrationDir, className, tableName, headers, camposTabla); err != nil {
 			fmt.Printf("⚠ Error al generar migración para %q: %v\n", sheet, err)
 		}
 
 		// Generar Modelo
-		if err := generateModel(modelDir, modelName, tableName, headers); err != nil {
+		if err := generators.GenerateModel(modelDir, modelName, tableName, headers); err != nil {
 			fmt.Printf("⚠ Error al generar modelo para %q: %v\n", sheet, err)
 		}
 

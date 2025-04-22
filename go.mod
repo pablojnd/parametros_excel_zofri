@@ -1,6 +1,6 @@
-module pablo.com/parametros_excel
+module github.com/zofri/parametros_excel
 
-go 1.24.2
+go 1.21
 
 require github.com/xuri/excelize/v2 v2.9.0
 
