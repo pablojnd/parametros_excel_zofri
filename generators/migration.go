@@ -50,44 +50,47 @@ return new class extends Migration
 	// Asociación de campos a tipos de dato Laravel según especificaciones
 	for _, h := range headers {
 		col := Normalize(h)
+		// Convertir nombre del campo a inglés si existe en el mapeo
+		englishFieldName := col
+		if en, exists := fieldNameMappings[col]; exists {
+			englishFieldName = en
+		}
 
 		// Buscar el tipo de dato y descripción en campos
 		tipoDato := "string"
 		nullable := "->nullable()"
-		comentario := ""
+		comentario := " // " + h // Por defecto, el comentario es el nombre original del campo
 
 		for _, campo := range campos {
 			if strings.EqualFold(campo["campo"], h) {
 				switch strings.ToUpper(campo["tipodato"]) {
 				case "VARCHAR2(10)", "VARCHAR2(40)", "VARCHAR2(50)", "VARCHAR2(60)", "VARCHAR2(100)", "VARCHAR2(200)":
 					maxLen := ExtractNumberFromString(campo["tipodato"])
-					tipoDato = fmt.Sprintf("string('%s', %d)", col, maxLen)
+					tipoDato = fmt.Sprintf("string('%s', %d)", englishFieldName, maxLen)
 				case "NUMBER(4,0)":
-					tipoDato = fmt.Sprintf("integer('%s')", col)
+					tipoDato = fmt.Sprintf("integer('%s')", englishFieldName)
 				case "CHAR(1)":
 					if strings.ToLower(col) == "vigencia" {
-						tipoDato = fmt.Sprintf("string('%s', 1)", col)
+						tipoDato = fmt.Sprintf("string('%s', 1)", englishFieldName)
 						nullable = ""
-						comentario = " // Utiliza VigenciaEnum para estado de vigencia (S/N)"
+						comentario = " // Vigencia (S/N) - Utiliza VigenciaEnum para estado de vigencia"
 					} else {
-						tipoDato = fmt.Sprintf("char('%s', 1)", col)
+						tipoDato = fmt.Sprintf("char('%s', 1)", englishFieldName)
 					}
 				default:
-					tipoDato = fmt.Sprintf("string('%s')", col)
+					tipoDato = fmt.Sprintf("string('%s')", englishFieldName)
 				}
 
 				if campo["descripcion"] != "" {
-					if comentario == "" {
-						comentario = fmt.Sprintf(" // %s", campo["descripcion"])
-					}
+					comentario = fmt.Sprintf(" // %s", campo["descripcion"])
 				}
 				break
 			}
 		}
 
 		// Si no se encontró información específica, usar valor predeterminado
-		if !strings.Contains(tipoDato, "'"+col+"'") {
-			tipoDato = fmt.Sprintf("string('%s')", col)
+		if !strings.Contains(tipoDato, "'"+englishFieldName+"'") {
+			tipoDato = fmt.Sprintf("string('%s')", englishFieldName)
 		}
 
 		if strings.ToLower(col) == "vigencia" {
@@ -166,44 +169,47 @@ return new class extends Migration
 		// Definir campos para esta tabla
 		for _, h := range mig.Headers {
 			col := Normalize(h)
+			// Convertir nombre del campo a inglés si existe en el mapeo
+			englishFieldName := col
+			if en, exists := fieldNameMappings[col]; exists {
+				englishFieldName = en
+			}
 
 			// Buscar el tipo de dato y descripción en campos
 			tipoDato := "string"
 			nullable := "->nullable()"
-			comentario := ""
+			comentario := " // " + h // Por defecto, el comentario es el nombre original del campo
 
 			for _, campo := range mig.CamposTabla {
 				if strings.EqualFold(campo["campo"], h) {
 					switch strings.ToUpper(campo["tipodato"]) {
 					case "VARCHAR2(10)", "VARCHAR2(40)", "VARCHAR2(50)", "VARCHAR2(60)", "VARCHAR2(100)", "VARCHAR2(200)":
 						maxLen := ExtractNumberFromString(campo["tipodato"])
-						tipoDato = fmt.Sprintf("string('%s', %d)", col, maxLen)
+						tipoDato = fmt.Sprintf("string('%s', %d)", englishFieldName, maxLen)
 					case "NUMBER(4,0)":
-						tipoDato = fmt.Sprintf("integer('%s')", col)
+						tipoDato = fmt.Sprintf("integer('%s')", englishFieldName)
 					case "CHAR(1)":
 						if strings.ToLower(col) == "vigencia" {
-							tipoDato = fmt.Sprintf("string('%s', 1)", col)
+							tipoDato = fmt.Sprintf("string('%s', 1)", englishFieldName)
 							nullable = ""
-							comentario = " // Utiliza VigenciaEnum para estado de vigencia (S/N)"
+							comentario = " // Vigencia (S/N) - Utiliza VigenciaEnum para estado de vigencia"
 						} else {
-							tipoDato = fmt.Sprintf("char('%s', 1)", col)
+							tipoDato = fmt.Sprintf("char('%s', 1)", englishFieldName)
 						}
 					default:
-						tipoDato = fmt.Sprintf("string('%s')", col)
+						tipoDato = fmt.Sprintf("string('%s')", englishFieldName)
 					}
 
 					if campo["descripcion"] != "" {
-						if comentario == "" {
-							comentario = fmt.Sprintf(" // %s", campo["descripcion"])
-						}
+						comentario = fmt.Sprintf(" // %s", campo["descripcion"])
 					}
 					break
 				}
 			}
 
 			// Si no se encontró información específica, usar valor predeterminado
-			if !strings.Contains(tipoDato, "'"+col+"'") {
-				tipoDato = fmt.Sprintf("string('%s')", col)
+			if !strings.Contains(tipoDato, "'"+englishFieldName+"'") {
+				tipoDato = fmt.Sprintf("string('%s')", englishFieldName)
 			}
 
 			if strings.ToLower(col) == "vigencia" {

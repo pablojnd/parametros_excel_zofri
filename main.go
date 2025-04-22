@@ -72,11 +72,12 @@ func main() {
 		return
 
 	case "1": // Generar archivos Laravel
-		// Creamos carpetas de salida
-		seedDir := "database/seeders"
-		migrationDir := "database/migrations"
-		modelDir := "app/Models"
-		enumDir := "app/Enums"
+		// Creamos carpetas de salida dentro de una estructura laravel/
+		laravelBaseDir := "laravel"
+		seedDir := laravelBaseDir + "/database/seeders"
+		migrationDir := laravelBaseDir + "/database/migrations"
+		modelDir := laravelBaseDir + "/app/Models"
+		enumDir := laravelBaseDir + "/app/Enums"
 
 		os.MkdirAll(seedDir, 0755)
 		os.MkdirAll(migrationDir, 0755)
@@ -91,7 +92,7 @@ func main() {
 		generarArchivosLaravel(f, sheets, seedDir, migrationDir, modelDir)
 
 		fmt.Println("\n\033[32m🚀 Todos los archivos Laravel han sido generados correctamente\033[0m")
-		fmt.Println("\033[33mRecuerda copiar estos archivos a tu proyecto Laravel antes de ejecutar las migraciones y seeders\033[0m")
+		fmt.Println("\033[33mRecuerda copiar estos archivos de la carpeta 'laravel/' a tu proyecto Laravel antes de ejecutar las migraciones y seeders\033[0m")
 		return
 
 	default:

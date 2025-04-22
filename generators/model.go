@@ -45,7 +45,7 @@ class %s extends Model
 	// Si tiene campo de vigencia, agregar casts
 	if tieneVigencia {
 		fmt.Fprintln(modFile, "    protected $casts = [")
-		fmt.Fprintln(modFile, "        'vigencia' => VigenciaEnum::class,")
+		fmt.Fprintln(modFile, "        'is_active' => VigenciaEnum::class, // Campo de vigencia")
 		fmt.Fprintln(modFile, "    ];")
 		fmt.Fprintln(modFile, "")
 	}
@@ -53,7 +53,12 @@ class %s extends Model
 	fmt.Fprintln(modFile, "    protected $fillable = [")
 	for _, h := range headers {
 		col := Normalize(h)
-		fmt.Fprintf(modFile, "        '%s',\n", col)
+		// Convertir a inglés si existe en el mapeo
+		englishFieldName := col
+		if en, exists := fieldNameMappings[col]; exists {
+			englishFieldName = en
+		}
+		fmt.Fprintf(modFile, "        '%s', // %s\n", englishFieldName, h)
 	}
 	fmt.Fprintln(modFile, "    ];")
 
@@ -61,9 +66,17 @@ class %s extends Model
 	if tieneVigencia {
 		fmt.Fprintln(modFile, "")
 		fmt.Fprintln(modFile, "    // Scope para filtrar registros vigentes")
+		fmt.Fprintln(modFile, "    public function scopeActive($query)")
+		fmt.Fprintln(modFile, "    {")
+		// Usar el nombre en inglés para el campo vigencia
+		fmt.Fprintln(modFile, "        return $query->where('is_active', VigenciaEnum::VIGENTE);")
+		fmt.Fprintln(modFile, "    }")
+
+		fmt.Fprintln(modFile, "")
+		fmt.Fprintln(modFile, "    // Método de compatibilidad con el nombre anterior")
 		fmt.Fprintln(modFile, "    public function scopeVigente($query)")
 		fmt.Fprintln(modFile, "    {")
-		fmt.Fprintln(modFile, "        return $query->where('vigencia', VigenciaEnum::VIGENTE);")
+		fmt.Fprintln(modFile, "        return $this->scopeActive($query);")
 		fmt.Fprintln(modFile, "    }")
 	}
 

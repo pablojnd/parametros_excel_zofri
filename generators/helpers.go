@@ -6,6 +6,43 @@ import (
 	"unicode"
 )
 
+// Mapeo de nombres de campo en español a inglés
+// Usado por todas las funciones de generación
+var fieldNameMappings = map[string]string{
+	// Campos básicos
+	"codigo":        "code",
+	"nombre":        "name",
+	"descripcion":   "description",
+	"vigencia":      "is_active",
+	"sigla":         "acronym",
+	"simbolo":       "symbol",
+	"aduana_codigo": "customs_code",
+	"id":            "id",
+
+	// Campos específicos
+	"etiqueta_impresion":      "print_label",
+	"tipo_de_dato_codigo":     "data_type_code",
+	"lista_de_valor_codigo":   "value_list_code",
+	"enteros":                 "integers",
+	"decimales":               "decimals",
+	"obligatoriedad":          "is_required",
+	"codigo_arancelario":      "tariff_code",
+	"descriptor_codigo":       "descriptor_code",
+	"unidad_de_medida_codigo": "measure_unit_code",
+
+	// Otros campos comunes
+	"fecha":     "date",
+	"tipo":      "type",
+	"valor":     "value",
+	"cantidad":  "quantity",
+	"estado":    "status",
+	"region":    "region",
+	"pais":      "country",
+	"direccion": "address",
+	"telefono":  "phone",
+	"correo":    "email",
+}
+
 // EscapeString escapa caracteres especiales en strings para PHP
 func EscapeString(s string) string {
 	// Reemplazar comillas simples por la secuencia de escape

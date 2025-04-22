@@ -59,6 +59,11 @@ class %s extends Seeder
 				for j, cell := range row {
 					if j < len(headers) {
 						key := Normalize(headers[j])
+						// Convertir a inglés si existe en el mapeo
+						englishFieldName := key
+						if en, exists := fieldNameMappings[key]; exists {
+							englishFieldName = en
+						}
 
 						// Manejar campo de vigencia y escapar caracteres especiales
 						if strings.ToLower(key) == "vigencia" {
@@ -66,11 +71,11 @@ class %s extends Seeder
 							if strings.ToUpper(cell) == "S" {
 								vigenciaValue = "VigenciaEnum::VIGENTE"
 							}
-							fmt.Fprintf(seeder, "                    '%s' => %s,\n", key, vigenciaValue)
+							fmt.Fprintf(seeder, "                    '%s' => %s, // %s\n", englishFieldName, vigenciaValue, headers[j])
 						} else {
 							// Escapar comillas y caracteres especiales
 							escapedCell := EscapeString(cell)
-							fmt.Fprintf(seeder, "                    '%s' => '%s',\n", key, escapedCell)
+							fmt.Fprintf(seeder, "                    '%s' => '%s', // %s\n", englishFieldName, escapedCell, headers[j])
 						}
 					}
 				}
@@ -90,6 +95,11 @@ class %s extends Seeder
 			for i, cell := range row {
 				if i < len(headers) {
 					key := Normalize(headers[i])
+					// Convertir a inglés si existe en el mapeo
+					englishFieldName := key
+					if en, exists := fieldNameMappings[key]; exists {
+						englishFieldName = en
+					}
 
 					// Manejo especial para campo de vigencia
 					if strings.ToLower(key) == "vigencia" {
@@ -97,11 +107,11 @@ class %s extends Seeder
 						if strings.ToUpper(cell) == "S" {
 							vigenciaValue = "VigenciaEnum::VIGENTE"
 						}
-						fmt.Fprintf(seeder, "                '%s' => %s,\n", key, vigenciaValue)
+						fmt.Fprintf(seeder, "                '%s' => %s, // %s\n", englishFieldName, vigenciaValue, headers[i])
 					} else {
 						// Escapar comillas y caracteres especiales
 						escapedCell := EscapeString(cell)
-						fmt.Fprintf(seeder, "                '%s' => '%s',\n", key, escapedCell)
+						fmt.Fprintf(seeder, "                '%s' => '%s', // %s\n", englishFieldName, escapedCell, headers[i])
 					}
 				}
 			}
