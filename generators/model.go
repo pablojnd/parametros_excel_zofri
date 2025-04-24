@@ -21,9 +21,6 @@ func GenerateModel(modelDir string, modelName string, tableName string, headers 
 
 	// Actualizamos el namespace para incluir Parametros
 	imports := "use Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Database\\Eloquent\\Model;"
-	if tieneVigencia {
-		imports += "\nuse App\\Enums\\VigenciaEnum;"
-	}
 
 	fmt.Fprintf(modFile, `<?php
 
@@ -42,10 +39,10 @@ class %s extends Model
     
 `, imports, modelName, tableName)
 
-	// Si tiene campo de vigencia, agregar casts
+	// Si tiene campo de vigencia, agregar casts a boolean
 	if tieneVigencia {
 		fmt.Fprintln(modFile, "    protected $casts = [")
-		fmt.Fprintln(modFile, "        'is_active' => VigenciaEnum::class, // Campo de vigencia")
+		fmt.Fprintln(modFile, "        'is_active' => 'boolean', // Campo de vigencia")
 		fmt.Fprintln(modFile, "    ];")
 		fmt.Fprintln(modFile, "")
 	}
@@ -65,11 +62,11 @@ class %s extends Model
 	// Si tiene campo de vigencia, agregar scope
 	if tieneVigencia {
 		fmt.Fprintln(modFile, "")
-		fmt.Fprintln(modFile, "    // Scope para filtrar registros vigentes")
+		fmt.Fprintln(modFile, "    // Scope para filtrar registros activos")
 		fmt.Fprintln(modFile, "    public function scopeActive($query)")
 		fmt.Fprintln(modFile, "    {")
 		// Usar el nombre en inglés para el campo vigencia
-		fmt.Fprintln(modFile, "        return $query->where('is_active', VigenciaEnum::VIGENTE);")
+		fmt.Fprintln(modFile, "        return $query->where('is_active', true);")
 		fmt.Fprintln(modFile, "    }")
 
 		fmt.Fprintln(modFile, "")

@@ -71,9 +71,9 @@ return new class extends Migration
 					tipoDato = fmt.Sprintf("integer('%s')", englishFieldName)
 				case "CHAR(1)":
 					if strings.ToLower(col) == "vigencia" {
-						tipoDato = fmt.Sprintf("string('%s', 1)", englishFieldName)
+						tipoDato = fmt.Sprintf("boolean('%s')", englishFieldName)
 						nullable = ""
-						comentario = " // Vigencia (S/N) - Utiliza VigenciaEnum para estado de vigencia"
+						comentario = " // Vigencia (true/false) - Indica si el registro está activo"
 					} else {
 						tipoDato = fmt.Sprintf("char('%s', 1)", englishFieldName)
 					}
@@ -94,7 +94,7 @@ return new class extends Migration
 		}
 
 		if strings.ToLower(col) == "vigencia" {
-			fmt.Fprintf(migFile, "            $table->%s->default(VigenciaEnum::VIGENTE->value);%s\n",
+			fmt.Fprintf(migFile, "            $table->%s->default(true);%s\n",
 				tipoDato, comentario)
 		} else {
 			fmt.Fprintf(migFile, "            $table->%s%s;%s\n",
@@ -190,9 +190,9 @@ return new class extends Migration
 						tipoDato = fmt.Sprintf("integer('%s')", englishFieldName)
 					case "CHAR(1)":
 						if strings.ToLower(col) == "vigencia" {
-							tipoDato = fmt.Sprintf("string('%s', 1)", englishFieldName)
+							tipoDato = fmt.Sprintf("boolean('%s')", englishFieldName)
 							nullable = ""
-							comentario = " // Vigencia (S/N) - Utiliza VigenciaEnum para estado de vigencia"
+							comentario = " // Vigencia (true/false) - Indica si el registro está activo"
 						} else {
 							tipoDato = fmt.Sprintf("char('%s', 1)", englishFieldName)
 						}
@@ -213,7 +213,7 @@ return new class extends Migration
 			}
 
 			if strings.ToLower(col) == "vigencia" {
-				fmt.Fprintf(migFile, "            $table->%s->default(VigenciaEnum::VIGENTE->value);%s\n",
+				fmt.Fprintf(migFile, "            $table->%s->default(true);%s\n",
 					tipoDato, comentario)
 			} else {
 				fmt.Fprintf(migFile, "            $table->%s%s;%s\n",

@@ -21,13 +21,14 @@ func GenerateSeeder(seedDir string, className string, modelName string, headers 
 	isLargeSeeder := len(dataRows) > 500
 	chunkSize := 100 // Tamaño de cada lote para seeders grandes
 
+	// No necesitamos importar VigenciaEnum si usamos boolean directamente
 	fmt.Fprintf(seeder, `<?php
 
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\%s;
-use App\Enums\VigenciaEnum;
+// use App\Enums\VigenciaEnum; // No necesario con cast a boolean
 use Illuminate\Support\Facades\DB;
 
 class %s extends Seeder
@@ -65,13 +66,13 @@ class %s extends Seeder
 							englishFieldName = en
 						}
 
-						// Manejar campo de vigencia y escapar caracteres especiales
+						// Manejar campo de vigencia (is_active) como boolean
 						if strings.ToLower(key) == "vigencia" {
-							vigenciaValue := "VigenciaEnum::NO_VIGENTE"
+							isActiveValue := "false" // Default to false
 							if strings.ToUpper(cell) == "S" {
-								vigenciaValue = "VigenciaEnum::VIGENTE"
+								isActiveValue = "true"
 							}
-							fmt.Fprintf(seeder, "                    '%s' => %s, // %s\n", englishFieldName, vigenciaValue, headers[j])
+							fmt.Fprintf(seeder, "                    '%s' => %s, // %s ('%s')\n", englishFieldName, isActiveValue, headers[j], cell)
 						} else {
 							// Escapar comillas y caracteres especiales
 							escapedCell := EscapeString(cell)
@@ -101,13 +102,13 @@ class %s extends Seeder
 						englishFieldName = en
 					}
 
-					// Manejo especial para campo de vigencia
+					// Manejo especial para campo de vigencia (is_active) como boolean
 					if strings.ToLower(key) == "vigencia" {
-						vigenciaValue := "VigenciaEnum::NO_VIGENTE"
+						isActiveValue := "false" // Default to false
 						if strings.ToUpper(cell) == "S" {
-							vigenciaValue = "VigenciaEnum::VIGENTE"
+							isActiveValue = "true"
 						}
-						fmt.Fprintf(seeder, "                '%s' => %s, // %s\n", englishFieldName, vigenciaValue, headers[i])
+						fmt.Fprintf(seeder, "                '%s' => %s, // %s ('%s')\n", englishFieldName, isActiveValue, headers[i], cell)
 					} else {
 						// Escapar comillas y caracteres especiales
 						escapedCell := EscapeString(cell)

@@ -21,12 +21,13 @@ func GenerateEnums(enumDir string) error {
 namespace App\Enums;
 
 /**
- * Enum para manejar el estado de vigencia en tablas de parámetros
+ * Enum para manejar el estado de vigencia (activo/inactivo)
+ * Se mapea a un booleano en la base de datos (1 = true, 0 = false)
  */
-enum VigenciaEnum: string
+enum VigenciaEnum: int
 {
-    case VIGENTE = 'S';    // Registro vigente/activo
-    case NO_VIGENTE = 'N'; // Registro no vigente/inactivo
+    case VIGENTE = 1;    // Registro activo (true en DB)
+    case NO_VIGENTE = 0; // Registro inactivo (false en DB)
     
     /**
      * Obtiene la etiqueta legible del estado
@@ -34,17 +35,33 @@ enum VigenciaEnum: string
     public function label(): string
     {
         return match($this) {
-            self::VIGENTE => 'Vigente',
-            self::NO_VIGENTE => 'No vigente',
+            self::VIGENTE => 'Activo',
+            self::NO_VIGENTE => 'Inactivo',
         };
     }
     
     /**
-     * Verifica si el estado es vigente
+     * Verifica si el estado es activo/vigente
      */
-    public function isVigente(): bool
+    public function isActive(): bool
     {
         return $this === self::VIGENTE;
+    }
+
+    /**
+     * Convierte el valor del enum a booleano para la base de datos.
+     */
+    public function toBoolean(): bool
+    {
+        return $this === self::VIGENTE;
+    }
+
+    /**
+     * Crea una instancia del enum desde un valor booleano.
+     */
+    public static function fromBoolean(bool $value): self
+    {
+        return $value ? self::VIGENTE : self::NO_VIGENTE;
     }
 }
 `)
