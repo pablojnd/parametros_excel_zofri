@@ -17,11 +17,15 @@ func GenerateSeeder(seedDir string, className string, modelName string, headers 
 	}
 	defer seeder.Close()
 
+	// Extraer el nombre base de la clase del modelName (ej: Parametros\ZofriAduanas -> ZofriAduanas)
+	parts := strings.Split(modelName, "\\")
+	baseModelName := parts[len(parts)-1]
+
 	// Determinar si el seeder es grande (más de 500 filas)
 	isLargeSeeder := len(dataRows) > 500
 	chunkSize := 100 // Tamaño de cada lote para seeders grandes
 
-	// No necesitamos importar VigenciaEnum si usamos boolean directamente
+	// Usar el modelName completo (con namespace) para la declaración 'use'
 	fmt.Fprintf(seeder, `<?php
 
 namespace Database\Seeders;
@@ -35,7 +39,7 @@ class %s extends Seeder
 {
     public function run()
     {
-`, modelName, className)
+`, modelName, className) // modelName aquí para el 'use'
 
 	// Si es un seeder grande, usar enfoque por lotes con transacciones
 	if isLargeSeeder {
@@ -84,7 +88,8 @@ class %s extends Seeder
 			}
 
 			fmt.Fprintln(seeder, "            ];")
-			fmt.Fprintf(seeder, "            foreach ($data as $item) {\n                %s::create($item);\n            }\n", modelName)
+			// Usar el baseModelName para la llamada ::create
+			fmt.Fprintf(seeder, "            foreach ($data as $item) {\n                %s::create($item);\n            }\n", baseModelName)
 			fmt.Fprintln(seeder, "        });")
 		}
 	} else {
@@ -119,9 +124,10 @@ class %s extends Seeder
 			fmt.Fprintln(seeder, "            ],")
 		}
 
+		// Usar el baseModelName para la llamada ::insert
 		fmt.Fprintf(seeder, `        ];
 
-        %s::insert($data);`, modelName)
+        %s::insert($data);`, baseModelName)
 	}
 
 	fmt.Fprintln(seeder, "\n    }")
@@ -159,7 +165,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@admin.com',
-            'password' => bcrypt('admin123'),
+            'password' => bcrypt('123456'),
             'email_verified_at' => now(),
         ]);
 

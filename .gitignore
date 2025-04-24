@@ -8,22 +8,15 @@
 *.out
 *.prof
 
-# Directorio de dependencias
-/vendor/
+# Directorio de dependencias (si no usas módulos Go o quieres ignorarlo)
+# /vendor/
 
-# Archivos de salida generados
-/app/
-/database/
+# Archivos y directorios de salida generados por la aplicación
+/laravel/
 /output_csv/
-*.csv
-sheet_summary.txt
+Listado_de_parametros.txt
 
-# Archivos de datos de entrada
-*.xlsx
-*.xls
-*.xlsm
-
-# Archivos de configuración
+# Archivos de configuración de IDEs y editores
 .idea/
 .vscode/
 *.suo
