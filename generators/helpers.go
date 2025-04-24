@@ -69,13 +69,17 @@ func ExtractNumberFromString(str string) int {
 	return 255 // valor por defecto
 }
 
-// ToClassName: "Mi Hoja" -> "MiHoja"
+// ToClassName: "Mi Hoja" -> "MiHoja", "Región" -> "Region"
 func ToClassName(s string) string {
+	// Primero, normalizar para quitar acentos y caracteres especiales
+	s = Normalize(s) // Esto convierte a snake_case y quita acentos
+
+	// Luego, convertir snake_case a CamelCase
 	var parts []string
-	for _, w := range strings.FieldsFunc(s, func(r rune) bool {
-		return !unicode.IsLetter(r) && !unicode.IsNumber(r)
-	}) {
-		parts = append(parts, strings.Title(strings.ToLower(w)))
+	for _, w := range strings.Split(s, "_") {
+		if w != "" { // Evitar partes vacías si hay múltiples underscores
+			parts = append(parts, strings.Title(w)) // Convertir a Title case
+		}
 	}
 	return strings.Join(parts, "")
 }
