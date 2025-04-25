@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"unicode"
 )
 
 // GenerateFilamentResource crea un archivo de recurso de Filament para un modelo
@@ -15,21 +16,29 @@ func GenerateFilamentResource(filamentDir string, modelName string, tableName st
 		displayName = modelName[5:] // Quitar "Zofri" del principio
 	}
 
-	// Convertir a singular y plural para etiquetas
-	singularLabel := displayName
-	pluralLabel := displayName + "s" // Simplificado, podría mejorarse con reglas de pluralización
+	// Formatear el displayName para que tenga espacios entre palabras
+	// Ejemplo: "ArancelesDeVehiculos" -> "Aranceles de Vehiculos"
+	formattedName := formatCamelCaseToReadable(displayName)
+
+	// Convertir a singular y plural para etiquetas sin duplicar la 's'
+	singularLabel := formattedName
+
+	// Para el plural, verificar si ya termina en 's' para no duplicarla
+	var pluralLabel string
+	if strings.HasSuffix(strings.ToLower(singularLabel), "s") {
+		pluralLabel = formattedName
+	} else {
+		pluralLabel = formattedName + "s"
+	}
 
 	// Determinar slug a partir del nombre de la tabla
 	slug := strings.ReplaceAll(tableName, "zofri_", "parametros/")
 
-	// Determinar icono basado en el tipo de modelo (simplificado)
-	icon := "heroicon-o-table"
-	if strings.Contains(strings.ToLower(modelName), "aduana") {
-		icon = "heroicon-o-building-office-2"
-	} else if strings.Contains(strings.ToLower(modelName), "codig") {
-		icon = "heroicon-o-document-text"
-	} else if strings.Contains(strings.ToLower(modelName), "unidad") {
-		icon = "heroicon-o-scale"
+	// Determinar grupo de navegación basado en el nombre
+	// Los modelos que contengan "Tipo" o similares van a "Tipos", el resto a "Parámetros"
+	navGroup := "Parámetros"
+	if strings.Contains(strings.ToLower(modelName), "tipo") {
+		navGroup = "Tipos"
 	}
 
 	// Crear directorio para el recurso si no existe
@@ -72,13 +81,13 @@ class %sResource extends Resource
 {
     protected static ?string $model = %s::class;
 
-    protected static ?string $navigationIcon = '%s';
-    protected static ?string $navigationGroup = 'Parametros';
+    // No definimos icono para evitar problemas de compatibilidad
+    protected static ?string $navigationGroup = '%s';
     protected static ?string $navigationLabel = '%s';
     protected static ?string $label = '%s';
     protected static ?string $pluralLabel = '%s';
     protected static ?string $slug = '%s';
-    protected static ?string $recordTitleAttribute = 'code';
+    protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $modelLabel = '%s';
     protected static ?string $pluralModelLabel = '%s';
     protected static bool $isScopedToTenant = false;
@@ -90,7 +99,7 @@ class %sResource extends Resource
                 Section::make('Información de %s')
                     ->columns(3)
                     ->schema([
-`, modelName, modelName, modelName, modelName, icon, pluralLabel, singularLabel, pluralLabel, slug, singularLabel, pluralLabel, singularLabel)
+`, modelName, modelName, modelName, modelName, navGroup, pluralLabel, singularLabel, pluralLabel, slug, singularLabel, pluralLabel, singularLabel)
 
 	// Generar campos del formulario basados en los encabezados
 	for _, h := range headers {
@@ -191,7 +200,7 @@ class %sResource extends Resource
 	generateCreatePage(pagesPath, modelName, singularLabel)
 	generateEditPage(pagesPath, modelName, singularLabel)
 
-	fmt.Printf("✅ Recurso Filament: %s\n", mainResourcePath)
+	fmt.Printf("✅ Recurso Filament: %s (Grupo: %s)\n", mainResourcePath, navGroup)
 	return nil
 }
 
@@ -292,4 +301,31 @@ class Edit%s extends EditRecord
 }
 `, modelName, modelName, modelName, modelName)
 	return nil
+}
+
+// formatCamelCaseToReadable convierte un string en camelCase a un formato legible con espacios
+// Ejemplo: "ArancelesDeVehiculos" -> "Aranceles de Vehiculos"
+func formatCamelCaseToReadable(s string) string {
+	var result []rune
+
+	// Si la cadena es vacía, devolver vacío
+	if len(s) == 0 {
+		return s
+	}
+
+	// Primera letra siempre en mayúscula
+	result = append(result, rune(s[0]))
+
+	// Procesar el resto de caracteres
+	for i := 1; i < len(s); i++ {
+		// Si encontramos una letra mayúscula, añadir un espacio antes
+		// excepto si la anterior también era mayúscula (evitando separar acrónimos)
+		current := rune(s[i])
+		if unicode.IsUpper(current) && i > 0 && !unicode.IsUpper(rune(s[i-1])) {
+			result = append(result, ' ')
+		}
+		result = append(result, current)
+	}
+
+	return string(result)
 }
