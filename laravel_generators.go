@@ -18,6 +18,10 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 	parametrosModelDir := filepath.Join(modelDir, "Parametros")
 	os.MkdirAll(parametrosModelDir, 0755)
 
+	// Crear directorio para recursos Filament
+	filamentBaseDir := filepath.Join("laravel", "app", "Filament", "Resources", "Parametros")
+	os.MkdirAll(filamentBaseDir, 0755)
+
 	// Guardar nombres de seeders para el DatabaseSeeder
 	var seederClassNames []string
 
@@ -77,6 +81,11 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 		if err := generators.GenerateModel(parametrosModelDir, modelName, tableName, headers); err != nil {
 			fmt.Printf("⚠ Error al generar modelo para %q: %v\n", sheet, err)
 		}
+
+		// Generar Filament Resource y Páginas
+		if err := generators.GenerateFilamentResource(filamentBaseDir, modelName, tableName, headers); err != nil {
+			fmt.Printf("⚠ Error al generar recurso Filament para %q: %v\n", sheet, err)
+		}
 	}
 
 	// Generar una única migración combinada
@@ -90,5 +99,6 @@ func generarArchivosLaravel(f *excelize.File, sheets []string, seedDir, migratio
 	}
 
 	fmt.Println("\n✅ Archivos Laravel generados correctamente")
+	fmt.Println("✅ Recursos Filament generados correctamente")
 	generators.DisplayCommandHints()
 }

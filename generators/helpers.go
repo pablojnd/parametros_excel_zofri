@@ -117,4 +117,8 @@ func DisplayCommandHints() {
 	fmt.Println("    \033[36mphp artisan make:model -m ModelName\033[0m")
 	fmt.Println("  - Para regenerar la cache:")
 	fmt.Println("    \033[36mphp artisan optimize:clear\033[0m")
+	fmt.Println("  - Para acceder al panel de Filament:")
+	fmt.Println("    \033[36mhttp://tu-app.test/admin\033[0m")
+	fmt.Println("  - Para crear un recurso Filament manualmente:")
+	fmt.Println("    \033[36mphp artisan make:filament-resource ModelName --generate\033[0m")
 }

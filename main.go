@@ -78,12 +78,14 @@ func main() {
 		migrationDir := laravelBaseDir + "/database/migrations"
 		modelDir := laravelBaseDir + "/app/Models"
 		enumDir := laravelBaseDir + "/app/Enums"
+		filamentDir := laravelBaseDir + "/app/Filament/Resources/Parametros"
 
 		os.MkdirAll(seedDir, 0755)
 		os.MkdirAll(migrationDir, 0755)
 		os.MkdirAll(modelDir, 0755)
 		os.MkdirAll(enumDir, 0755)
 		os.MkdirAll(modelDir+"/Parametros", 0755) // Crear subdirectorio para modelos de parámetros
+		os.MkdirAll(filamentDir, 0755)            // Crear directorio para recursos Filament
 
 		// Generamos los enums primero
 		generators.GenerateEnums(enumDir)
@@ -93,6 +95,7 @@ func main() {
 
 		fmt.Println("\n\033[32m🚀 Todos los archivos Laravel han sido generados correctamente\033[0m")
 		fmt.Println("\033[33mRecuerda copiar estos archivos de la carpeta 'laravel/' a tu proyecto Laravel antes de ejecutar las migraciones y seeders\033[0m")
+		fmt.Println("\033[33mLos recursos Filament están disponibles en 'laravel/app/Filament/Resources/Parametros/'\033[0m")
 		return
 
 	default:
